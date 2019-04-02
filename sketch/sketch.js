@@ -1,36 +1,54 @@
-const squareSize = 10
-let position = 100;
+const squareSize = 10;
+let positionX = 100;
+let positionY = 100;
 let moving = true;
-let amountToMovePerCycle = 3;
 let count = 0;
+let xVelocity = -2;
+let yVelocity = 1;
 
 function setup() {
-  createCanvas(300, 300) 
+  createCanvas(300, 300); 
 }
 
 function draw() {
   background(100);
-  
 
-  if ((position > (width-squareSize)) ||  position < 0) {
-    amountToMovePerCycle = amountToMovePerCycle * -1;
+  if (isAtLefthandSide() ||  isAtRightHandSide()) {
+    xVelocity *= -1;
+    count++;
+  }
+
+  if (isAtTop() ||  isAtBottom()) {
+    yVelocity *= -1;
     count++;
   }
 
   if (moving) {
-    position = position + amountToMovePerCycle;
+    positionX = positionX + xVelocity;
+    positionY = positionY + yVelocity;
   }
-  rect(position,0,squareSize,squareSize);
-  text('The number of cycles is: ' + count, 10, 30);
+  rect(positionX,positionY,squareSize,squareSize);
+  text('Bounce Count: ' + count, 30, 30);
 } 
-
 
 function mousePressed() {
   console.log('mouse pressed')
   moving = !moving;
 }
 
-    // amountToMovePerCycle = -0.5;
-  // } else if (position < 0) {
-    // amountToMovePerCycle = 0.5;
-  // }
+function isAtLefthandSide() {
+  return (positionX > (width - squareSize));
+}
+
+function isAtRightHandSide() {
+  return positionX < 0;
+}
+
+function isAtTop() {
+  return (positionY > (height - squareSize));
+}
+
+function isAtBottom() {
+  return positionY < 0;
+}
+
