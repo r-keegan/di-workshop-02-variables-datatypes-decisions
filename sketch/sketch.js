@@ -1,22 +1,22 @@
+let position = 100;
+let moving = true;
+
+
 function setup() {
-  createCanvas(600, 600)
-  background(255, 255, 255)
+  createCanvas(400, 200)
 }
 
 function draw() {
-  if (keyIsPressed) {
-    if (key == 'r') {
-      fill(255, 0, 0);
-    } else if (key == 'g') {
-      fill(0, 255, 0);
-    } else if (key == 'b') {
-      fill(0, 0, 255);
-    } else {
-      fill(0)
-    }
+  if(moving){
+    background(100)
+    position = position + 0.5
+    rect(position,0,10,10)
   }
-
-  ellipse(mouseX, mouseY, 10, 10)
+  // console.log('The position is ' + position)
+  // console.log('The position is ' + moving)
 }
 
-
+function mousePressed() {
+  console.log('mouse pressed')
+  moving = !moving;
+}
