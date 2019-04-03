@@ -1,0 +1,13 @@
+h1 {
+    color: rgb(185, 37, 185);
+}
+
+button {
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+  }
+  
+button:hover {
+    background-color: rgb(185, 37, 185); 
+    color: white;
+  }
