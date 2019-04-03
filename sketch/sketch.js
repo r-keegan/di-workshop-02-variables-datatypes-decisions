@@ -11,9 +11,10 @@ let yVelocity = 1;
 //paddle
 let xPaddle;
 let yPaddle;
-let paddleWidth = 100;
-let paddleHeight = 25;
+let paddleWidth = 50;
+let paddleHeight = 15;
 let started = false;
+let score = 0;
 
 
 function setup() {
@@ -42,11 +43,12 @@ function draw() {
   }
   ellipse(positionX,positionY,diameter,diameter);
   text('Bounce Count: ' + bounceCount, 30, 30);
-  
+
   //when ball hits paddle
-  if (isAtPaddleLeft() && (isAtPaddleRight())) {
+  if (isAtPaddleSides() && (isAtTopOfPaddle())) {
     xVelocity *= -1;
     yVelocity *= -1;
+    score++;
   }
 
   fill(0, 255, 255);
@@ -58,13 +60,14 @@ function draw() {
     yPaddle = height-100;
     started = true;
   }
+  text('SCORE: ' + score, 30, 50);
 } 
 
-function isAtPaddleRight() {
+function isAtTopOfPaddle() {
   return (positionY  + (diameter/2) >= yPaddle);
 }
 
-function isAtPaddleLeft() {
+function isAtPaddleSides() {
   return (positionX > xPaddle && positionX < xPaddle + paddleWidth);
 }
 
