@@ -1,24 +1,45 @@
 //ball
 const diameter = 20;
-let positionX = 100;
-let positionY = 100;
-let moving = true;
-let bounceCount = 0;
-let leftCount = 0;
-let xVelocity = -2;
-let yVelocity = 1;
+let ballsXLocation;
+let positionY;
+let moving;
+let bounceCount;
+let xVelocity;
+let yVelocity;
 
 //paddle
-let xPaddle;
+let paddlesXLocation;
 let yPaddle;
-let paddleWidth = 50;
-let paddleHeight = 15;
-let started = false;
-let score = 0;
+let paddleWidth;
+let paddleHeight;
+let started;
+let score;
 
 
 function setup() {
-  createCanvas(300, 300); 
+  document.querySelector('button').addEventListener('click', function () {
+    init();
+  })
+  createCanvas(300, 300);
+  init();
+}
+
+function init() {
+  //ball
+  ballsXLocation = 100;
+  positionY = 100;
+  moving = true;
+  bounceCount = 1;
+  xVelocity = -2;
+  yVelocity = 1;
+
+  //paddle
+  paddlesXLocation;
+  yPaddle;
+  paddleWidth = 50;
+  paddleHeight = 15;
+  started = false;
+  score = 0;
 }
 
 function draw() {
@@ -27,48 +48,62 @@ function draw() {
   noStroke();
 
   //making ball move
-  if (isAtLeftHandSide() ||  isAtRightHandSide()) {
+  if (isAtLeftHandSide() || isAtRightHandSide()) {
     xVelocity *= -1;
     bounceCount++;
   }
 
-  if (isAtTop() ||  isAtBottom()) {
-    yVelocity *= -1;
+  if (isAtTop()) {
+    yVelocity -= -1;
     bounceCount++;
+  }
+
+  if (positionY > height) {
+    text('YOU LOSE', 30, 100);
+    moving = false;
   }
 
   if (moving) {
-    positionX = positionX + xVelocity;
+    ballsXLocation = ballsXLocation + xVelocity;
     positionY = positionY + yVelocity;
   }
-  ellipse(positionX,positionY,diameter,diameter);
+  ellipse(ballsXLocation, positionY, diameter, diameter);
   text('Bounce Count: ' + bounceCount, 30, 30);
 
   //when ball hits paddle
-  if (isAtPaddleSides() && (isAtTopOfPaddle())) {
-    xVelocity *= -1;
-    yVelocity *= -1;
-    score++;
+  if (isAtTopOfPaddle()) {
+    if (isAtPaddleLeftHandSide()) {
+      xVelocity *= -1;
+      yVelocity *= -1;
+      score++;
+    } else if (isAtPaddleRightHandSide()) {
+      yVelocity *= -1;
+      score++;
+    }
   }
 
   fill(0, 255, 255);
   noStroke;
-  rect (xPaddle, yPaddle, paddleWidth, paddleHeight)
+  rect(paddlesXLocation, yPaddle, paddleWidth, paddleHeight)
 
   if (!started) {
-    xPaddle = width/2;
-    yPaddle = height-100;
+    paddlesXLocation = width / 2;
+    yPaddle = height - 50;
     started = true;
   }
   text('SCORE: ' + score, 30, 50);
-} 
-
-function isAtTopOfPaddle() {
-  return (positionY  + (diameter/2) >= yPaddle);
 }
 
-function isAtPaddleSides() {
-  return (positionX > xPaddle && positionX < xPaddle + paddleWidth);
+function isAtTopOfPaddle() {
+  return ((positionY + (diameter / 2)) >= yPaddle);
+}
+
+function isAtPaddleLeftHandSide() {
+  return ((ballsXLocation > paddlesXLocation) && (ballsXLocation < (paddlesXLocation + (paddleWidth / 2))));
+}
+
+function isAtPaddleRightHandSide() {
+  return ((ballsXLocation > paddlesXLocation + (paddleWidth / 2)) && (ballsXLocation < (paddlesXLocation + paddleWidth)));
 }
 
 function mousePressed() {
@@ -78,29 +113,31 @@ function mousePressed() {
 
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
-    xPaddle -= 50;
+    paddlesXLocation -= 50;
   } else if (keyCode === RIGHT_ARROW) {
-    xPaddle += 50;
-  } else if (keyCode === UP_ARROW) {
-    yPaddle -= 50;
-  } else if (keyCode === DOWN_ARROW) {
-    yPaddle += 50;
+    paddlesXLocation += 50;
+    // } else if (keyCode === UP_ARROW) {
+    //   yPaddle -= 50;
+    // } else if (keyCode === DOWN_ARROW) {
+    // yPaddle += 50;
   }
 }
 
 function isAtRightHandSide() {
-  return (positionX > (width - diameter/2));
+  return (ballsXLocation > (width - diameter / 2));
 }
 
 function isAtLeftHandSide() {
-  return (positionX < (0 + diameter/2));
-}
-
-function isAtTop() {
-  return (positionY > (height - diameter/2));
+  return (ballsXLocation < (0 + diameter / 2));
 }
 
 function isAtBottom() {
-  return (positionY < (0 + diameter/2));
+  return (positionY > (height - diameter / 2));
 }
+
+function isAtTop() {
+  return (positionY < (0 + diameter / 2));
+}
+
+
 
